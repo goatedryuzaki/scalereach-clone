@@ -1,0 +1,228 @@
+{
+  "workspace": {
+    "id": "0tw4uwrqqbgmw0kuqm9",
+    "name": "Ryuzaki's Workspace",
+    "slug": "goatedryuzaki",
+    "plan": "unlimited_pro",
+    "role": "owner",
+    "ownerId": "local_user",
+    "createdAt": "2026-11-03T12:49:44.825Z",
+    "updatedAt": "2026-11-03T12:49:44.829Z",
+    "minutesRemaining": null,
+    "minutesTotal": null,
+    "watermarkEnabled": false,
+    "export1080pUnlocked": true,
+    "export60fpsUnlocked": true,
+    "unlimitedExports": true
+  },
+  "videos": {
+    "NP_YeDf3CshTE1VklsggI": {
+      "id": "NP_YeDf3CshTE1VklsggI",
+      "workspaceId": "0tw4uwrqqbgmw0kuqm9",
+      "title": "How to Build and Scale Products (Podcast Clip)",
+      "description": "Masterclass on growth, product strategy, and content marketing hooks.",
+      "duration": 317,
+      "status": "completed",
+      "sourceType": "url",
+      "sourceUrl": "https://www.youtube.com/watch?v=gCHSEGBp8ME",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=800&auto=format&fit=crop&q=60",
+      "progress": 100,
+      "clipConfig": {
+        "clipModel": "ClipPro",
+        "duration": "30s-60s",
+        "clipTypes": [
+          "viral-clips",
+          "speakers-insights"
+        ],
+        "customPrompt": "Focus on high energy counter-intuitive insights",
+        "captionTemplateId": "hormozi",
+        "aspectRatio": "9:16"
+      },
+      "expiresAt": null,
+      "createdAt": "2026-11-03T11:49:44.829Z",
+      "updatedAt": "2026-11-03T12:49:44.829Z"
+    }
+  },
+  "clips": {
+    "ADWzEcKDfeqMZ1beA7BQX": {
+      "id": "ADWzEcKDfeqMZ1beA7BQX",
+      "videoId": "NP_YeDf3CshTE1VklsggI",
+      "title": "The Uncomfortable Truth About Virality",
+      "introTitle": "Stop Making This Mistake!",
+      "startTime": 18.5,
+      "endTime": 54.2,
+      "duration": 35.7,
+      "transcript": "Welcome to ScaleReach, the fastest way to turn podcasts into viral shorts. Look at how fast they are talking!",
+      "viralityScore": 94,
+      "viralityReason": "Strong curiosity gap opening followed by rapid punchy insight and high emotional contrast.",
+      "improvementSuggestion": "Flawless pacing. Ready for direct distribution across all platforms.",
+      "hooks": [
+        "Curiosity Gap",
+        "Shocking Truth",
+        "Value Hook"
+      ],
+      "emotions": [
+        "Curious",
+        "Surprised",
+        "Inspired"
+      ],
+      "recommendedPlatforms": [
+        "TikTok",
+        "YouTube Shorts",
+        "Instagram Reels"
+      ],
+      "aspectRatio": "9:16",
+      "templateId": "hormozi",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=600&auto=format&fit=crop&q=60",
+      "favorited": true,
+      "createdAt": "2026-11-03T12:49:44.829Z",
+      "updatedAt": "2026-11-03T12:49:44.829Z"
+    },
+    "clip_second_sample_98": {
+      "id": "clip_second_sample_98",
+      "videoId": "NP_YeDf3CshTE1VklsggI",
+      "title": "Why 99% of Content Creators Fail in Year One",
+      "introTitle": "Pay Attention to This!",
+      "startTime": 62,
+      "endTime": 108.5,
+      "duration": 46.5,
+      "transcript": "Everyone thinks consistency means posting every single day, but consistency without high retention is just organized noise.",
+      "viralityScore": 96,
+      "viralityReason": "Contrarian point of view challenging industry common knowledge with explosive retention metrics.",
+      "improvementSuggestion": "Flawless pacing. Ready for direct distribution across all platforms.",
+      "hooks": [
+        "Contrarian Insight",
+        "Curiosity Gap"
+      ],
+      "emotions": [
+        "Shocked",
+        "Motivated"
+      ],
+      "recommendedPlatforms": [
+        "TikTok",
+        "YouTube Shorts",
+        "Instagram Reels"
+      ],
+      "aspectRatio": "9:16",
+      "templateId": "mrbeast-pro",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=600&auto=format&fit=crop&q=60",
+      "favorited": false,
+      "createdAt": "2026-11-03T12:49:44.829Z",
+      "updatedAt": "2026-11-03T12:49:44.829Z"
+    }
+  },
+  "captions": {
+    "ADWzEcKDfeqMZ1beA7BQX": {
+      "clipId": "ADWzEcKDfeqMZ1beA7BQX",
+      "presetId": "hormozi",
+      "words": [
+        {
+          "id": "w-0",
+          "word": "Welcome",
+          "start": 0.42,
+          "end": 0.88,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-1",
+          "word": "to",
+          "start": 0.9,
+          "end": 1.05,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-2",
+          "word": "ScaleReach,",
+          "start": 1.08,
+          "end": 1.62,
+          "isHighlighted": true,
+          "color": "#FFFF00"
+        },
+        {
+          "id": "w-3",
+          "word": "the",
+          "start": 1.65,
+          "end": 1.8,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-4",
+          "word": "fastest",
+          "start": 1.82,
+          "end": 2.25,
+          "isHighlighted": true,
+          "color": "#00FF00"
+        },
+        {
+          "id": "w-5",
+          "word": "way",
+          "start": 2.28,
+          "end": 2.5,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-6",
+          "word": "to",
+          "start": 2.52,
+          "end": 2.65,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-7",
+          "word": "turn",
+          "start": 2.68,
+          "end": 2.95,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-8",
+          "word": "podcasts",
+          "start": 2.98,
+          "end": 3.45,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-9",
+          "word": "into",
+          "start": 3.48,
+          "end": 3.7,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-10",
+          "word": "viral",
+          "start": 3.72,
+          "end": 4.1,
+          "isHighlighted": true,
+          "color": "#FFD700"
+        },
+        {
+          "id": "w-11",
+          "word": "shorts.",
+          "start": 4.12,
+          "end": 4.8,
+          "isHighlighted": false
+        }
+      ],
+      "style": {
+        "fontFamily": "Anton",
+        "fontSize": 48,
+        "textColor": "#FFFFFF",
+        "highlightColor": "#FFD700",
+        "strokeColor": "#000000",
+        "strokeWidth": 5,
+        "animation": "punch"
+      }
+    }
+  },
+  "exportJobs": {},
+  "brandTemplates": {
+    "bt_1": {
+      "id": "bt_1",
+      "name": "My Personal Branding",
+      "aspectRatio": "9:16",
+      "captionTemplateId": "hormozi",
+      "createdAt": "2026-11-03T12:49:44.830Z"
+    }
+  }
+}
