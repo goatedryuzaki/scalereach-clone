@@ -1,0 +1,51 @@
+{
+  "standard": [
+    { "id": "w-0", "word": "Welcome", "start": 0.42, "end": 0.88, "isHighlighted": false },
+    { "id": "w-1", "word": "to", "start": 0.90, "end": 1.05, "isHighlighted": false },
+    { "id": "w-2", "word": "ScaleReach,", "start": 1.08, "end": 1.62, "isHighlighted": true, "color": "#FFFF00" },
+    { "id": "w-3", "word": "the", "start": 1.65, "end": 1.80, "isHighlighted": false },
+    { "id": "w-4", "word": "fastest", "start": 1.82, "end": 2.25, "isHighlighted": true, "color": "#00FF00" },
+    { "id": "w-5", "word": "way", "start": 2.28, "end": 2.50, "isHighlighted": false },
+    { "id": "w-6", "word": "to", "start": 2.52, "end": 2.65, "isHighlighted": false },
+    { "id": "w-7", "word": "turn", "start": 2.68, "end": 2.95, "isHighlighted": false },
+    { "id": "w-8", "word": "podcasts", "start": 2.98, "end": 3.45, "isHighlighted": false },
+    { "id": "w-9", "word": "into", "start": 3.48, "end": 3.70, "isHighlighted": false },
+    { "id": "w-10", "word": "viral", "start": 3.72, "end": 4.10, "isHighlighted": true, "color": "#FFD700" },
+    { "id": "w-11", "word": "shorts.", "start": 4.12, "end": 4.80, "isHighlighted": false }
+  ],
+  "rapidSpeech": [
+    { "id": "r-0", "word": "Look", "start": 10.00, "end": 10.05, "isHighlighted": false },
+    { "id": "r-1", "word": "at", "start": 10.05, "end": 10.08, "isHighlighted": false },
+    { "id": "r-2", "word": "how", "start": 10.08, "end": 10.12, "isHighlighted": false },
+    { "id": "r-3", "word": "fast", "start": 10.12, "end": 10.16, "isHighlighted": true, "color": "#39FF14" },
+    { "id": "r-4", "word": "they", "start": 10.16, "end": 10.19, "isHighlighted": false },
+    { "id": "r-5", "word": "are", "start": 10.19, "end": 10.22, "isHighlighted": false },
+    { "id": "r-6", "word": "talking!", "start": 10.22, "end": 10.28, "isHighlighted": false }
+  ],
+  "zeroDurationEdgeCase": [
+    { "id": "z-0", "word": "instant", "start": 5.00, "end": 5.00, "isHighlighted": false },
+    { "id": "z-1", "word": "word", "start": 5.06, "end": 5.15, "isHighlighted": false }
+  ],
+  "overlappingTimestamps": [
+    { "id": "o-0", "word": "First", "start": 1.00, "end": 1.60, "isHighlighted": false },
+    { "id": "o-1", "word": "word", "start": 1.40, "end": 2.10, "isHighlighted": false },
+    { "id": "o-2", "word": "overlap", "start": 1.90, "end": 2.50, "isHighlighted": false }
+  ],
+  "unicodeMultilingual": [
+    { "id": "u-0", "word": "Welcome", "start": 0.0, "end": 0.5, "isHighlighted": false },
+    { "id": "u-1", "word": "🔥🚀", "start": 0.55, "end": 0.95, "isHighlighted": true, "color": "#FE2C55" },
+    { "id": "u-2", "word": "こんにちは", "start": 1.0, "end": 1.8, "isHighlighted": false },
+    { "id": "u-3", "word": "नमस्ते", "start": 1.85, "end": 2.4, "isHighlighted": true, "color": "#FFD400" },
+    { "id": "u-4", "word": "مرحبا", "start": 2.45, "end": 3.1, "isHighlighted": false },
+    { "id": "u-5", "word": "España", "start": 3.15, "end": 3.8, "isHighlighted": false }
+  ],
+  "adversarialMetaCharacters": [
+    { "id": "m-0", "word": "{Special\\Ntag}", "start": 0.0, "end": 0.6, "isHighlighted": false },
+    { "id": "m-1", "word": "Test\\h<script>alert(1)</script>", "start": 0.65, "end": 1.3, "isHighlighted": true, "color": "#00FF41" },
+    { "id": "m-2", "word": "\"Quotes\" & 'Apostrophes'", "start": 1.35, "end": 2.0, "isHighlighted": false },
+    { "id": "m-3", "word": "Backslash\\\\Double", "start": 2.05, "end": 2.6, "isHighlighted": false }
+  ],
+  "shortSpeechAudio": [
+    { "id": "s-0", "word": "Hi.", "start": 1.0, "end": 2.2, "isHighlighted": false }
+  ]
+}

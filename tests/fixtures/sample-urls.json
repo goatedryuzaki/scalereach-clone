@@ -1,0 +1,140 @@
+{
+  "validUrls": [
+    {
+      "platform": "youtube",
+      "url": "https://www.youtube.com/watch?v=gCHSEGBp8ME",
+      "expectedId": "gCHSEGBp8ME",
+      "format": "standard"
+    },
+    {
+      "platform": "youtube",
+      "url": "https://youtu.be/gCHSEGBp8ME",
+      "expectedId": "gCHSEGBp8ME",
+      "format": "short_link"
+    },
+    {
+      "platform": "youtube",
+      "url": "https://www.youtube.com/shorts/3fM6U3vH2b0",
+      "expectedId": "3fM6U3vH2b0",
+      "format": "short"
+    },
+    {
+      "platform": "twitch",
+      "url": "https://www.twitch.tv/videos/2291823491",
+      "expectedId": "2291823491",
+      "format": "vod"
+    },
+    {
+      "platform": "kick",
+      "url": "https://kick.com/streamer/videos/984318",
+      "expectedId": "984318",
+      "format": "vod"
+    },
+    {
+      "platform": "google_drive",
+      "url": "https://drive.google.com/file/d/1A2B3C4D5E6F7G8H9/view",
+      "expectedId": "1A2B3C4D5E6F7G8H9",
+      "format": "file"
+    },
+    {
+      "platform": "dropbox",
+      "url": "https://www.dropbox.com/s/abcdef123456/interview.mp4?dl=0",
+      "expectedId": "abcdef123456",
+      "format": "file"
+    },
+    {
+      "platform": "loom",
+      "url": "https://www.loom.com/share/9a8b7c6d5e4f3a2b1c0d",
+      "expectedId": "9a8b7c6d5e4f3a2b1c0d",
+      "format": "share"
+    },
+    {
+      "platform": "rumble",
+      "url": "https://rumble.com/v123456-exclusive-podcast.html",
+      "expectedId": "v123456",
+      "format": "video"
+    },
+    {
+      "platform": "dailymotion",
+      "url": "https://www.dailymotion.com/video/x8abcdef",
+      "expectedId": "x8abcdef",
+      "format": "video"
+    },
+    {
+      "platform": "streamable",
+      "url": "https://streamable.com/m4k2lp",
+      "expectedId": "m4k2lp",
+      "format": "video"
+    },
+    {
+      "platform": "wistia",
+      "url": "https://company.wistia.com/medias/9a8b7c6d5e",
+      "expectedId": "9a8b7c6d5e",
+      "format": "video"
+    },
+    {
+      "platform": "vidyard",
+      "url": "https://share.vidyard.com/watch/a1b2c3d4e5",
+      "expectedId": "a1b2c3d4e5",
+      "format": "video"
+    },
+    {
+      "platform": "direct",
+      "url": "https://media.example.com/videos/podcast_master.mp4",
+      "expectedId": "podcast_master",
+      "format": "mp4"
+    },
+    {
+      "platform": "direct",
+      "url": "https://media.example.com/videos/recording.mov",
+      "expectedId": "recording",
+      "format": "mov"
+    },
+    {
+      "platform": "direct",
+      "url": "https://media.example.com/videos/webclip.webm",
+      "expectedId": "webclip",
+      "format": "webm"
+    }
+  ],
+  "invalidUrls": [
+    {
+      "url": "https://www.twitch.tv/shroud",
+      "reason": "Twitch live stream channel instead of VOD",
+      "expectedError": "Live streams are not supported. Please provide a finished VOD URL."
+    },
+    {
+      "url": "ftp://files.example.com/movie.mp4",
+      "reason": "Unsupported FTP protocol",
+      "expectedError": "Invalid protocol: only HTTP/HTTPS URLs are supported."
+    },
+    {
+      "url": "javascript:alert(1)",
+      "reason": "Malicious JavaScript pseudo-protocol",
+      "expectedError": "Invalid URL protocol."
+    },
+    {
+      "url": "file:///C:/Windows/System32/cmd.exe",
+      "reason": "Local file URL scheme attempt",
+      "expectedError": "File URLs are not allowed for remote ingestion."
+    },
+    {
+      "url": "https://www.youtube.com/playlist?list=PL1234567890",
+      "reason": "Playlist URL instead of single video",
+      "expectedError": "Playlists are not supported. Please provide a direct video URL."
+    },
+    {
+      "url": "not-a-valid-url-at-all",
+      "reason": "Arbitrary non-URL string",
+      "expectedError": "Malformed URL format."
+    }
+  ],
+  "uploadFiles": [
+    { "filename": "clip.mp4", "mime": "video/mp4", "valid": true, "size": 52428800 },
+    { "filename": "interview.mov", "mime": "video/quicktime", "valid": true, "size": 157286400 },
+    { "filename": "demo.webm", "mime": "video/webm", "valid": true, "size": 10485760 },
+    { "filename": "document.pdf", "mime": "application/pdf", "valid": false, "reason": "Non-video MIME" },
+    { "filename": "song.mp3", "mime": "audio/mpeg", "valid": false, "reason": "Audio-only not supported for video ingestion" },
+    { "filename": "photo.jpg", "mime": "image/jpeg", "valid": false, "reason": "Static image not supported" }
+  ]
+}
