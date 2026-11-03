@@ -117,12 +117,16 @@ async function executeRenderJob(
   return new Promise<void>((resolve, reject) => {
     let command = ffmpeg();
 
+    const renderDuration = sourcePath
+      ? Math.max(1, clip.duration || 10)
+      : Math.min(10, Math.max(1, clip.duration || 5));
+
     if (sourcePath) {
       // Use actual video input
       command = command
         .input(sourcePath)
         .setStartTime(startTime)
-        .setDuration(duration);
+        .setDuration(renderDuration);
 
       const filtergraph = buildLayoutFiltergraph(
         options.layoutType === 'single'
@@ -141,10 +145,11 @@ async function executeRenderJob(
       // Synthetic canvas generator for offline/sample clips
       // Renders clean dark canvas matching ScaleReach theme
       command = command
-        .input(`color=c=0x090A0F:s=1080x1920:d=${duration}:r=${options.fps}`)
+        .input(`color=c=0x090A0F:s=1080x1920:d=${renderDuration}:r=30`)
         .inputFormat('lavfi')
         .input(`anullsrc=channel_layout=stereo:sample_rate=44100`)
-        .inputFormat('lavfi');
+        .inputFormat('lavfi')
+        .duration(renderDuration);
 
       if (assPath) {
         const escapedAss = assPath.replace(/\\/g, '/').replace(/:/g, '\\:');
@@ -156,19 +161,31 @@ async function executeRenderJob(
       .output(outputFile)
       .videoCodec('libx264')
       .outputOptions([
-        '-preset veryfast',
-        '-crf 18',
+        '-preset ultrafast',
+        '-crf 23',
         '-pix_fmt yuv420p',
-        `-r ${options.fps}`,
+        `-r ${Math.min(60, options.fps || 30)}`,
         '-movflags +faststart',
+        `-t ${renderDuration}`,
+        '-shortest',
       ])
       .audioCodec('aac')
       .audioBitrate('192k')
       .on('progress', progress => {
-        if (progress && progress.percent) {
-          const currentProgress = Math.min(95, Math.max(30, Math.round(progress.percent)));
-          db.updateExportJob(jobId, { progress: currentProgress });
+        let currentProgress = 35;
+        if (progress && typeof progress.percent === 'number' && !isNaN(progress.percent) && progress.percent > 0) {
+          currentProgress = Math.min(95, Math.max(30, Math.round(progress.percent)));
+        } else if (progress && progress.timemark) {
+          const parts = progress.timemark.split(':');
+          if (parts.length === 3) {
+            const secs = parseFloat(parts[0]) * 3600 + parseFloat(parts[1]) * 60 + parseFloat(parts[2]);
+            if (renderDuration > 0 && !isNaN(secs)) {
+              const pct = 30 + Math.round((secs / renderDuration) * 65);
+              currentProgress = Math.min(95, Math.max(30, pct));
+            }
+          }
         }
+        db.updateExportJob(jobId, { progress: currentProgress });
       })
       .on('end', () => {
         db.updateExportJob(jobId, {

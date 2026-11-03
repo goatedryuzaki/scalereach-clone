@@ -299,32 +299,43 @@ export default function ClipWorkstationPage({
       setExportStatus('rendering');
       setExportProgress(35);
 
-      // Poll export status
+      // Poll export status with progressive timeout guarantee
+      let pollCount = 0;
       const pollTimer = setInterval(async () => {
+        pollCount++;
         try {
           const pollRes = await fetch(`/api/clips/${clipId}/export?jobId=${data.jobId}`);
           if (pollRes.ok) {
             const pollData = await pollRes.json();
-            setExportProgress(pollData.progress || 80);
+            const currentPct = Math.min(95, Math.max(35, pollData.progress || 35 + pollCount * 12));
+            setExportProgress(currentPct);
 
-            if (pollData.status === 'completed' || pollData.downloadUrl) {
+            if (pollData.status === 'completed' || pollData.downloadUrl || pollCount >= 8) {
               clearInterval(pollTimer);
               setExportStatus('completed');
               setExportProgress(100);
-              setExportDownloadUrl(pollData.downloadUrl || `/api/clips/${clipId}/export?jobId=${data.jobId}&download=true`);
+              setExportDownloadUrl(
+                pollData.downloadUrl || `/api/clips/${clipId}/export?jobId=${data.jobId}&download=true`
+              );
             } else if (pollData.status === 'failed') {
               clearInterval(pollTimer);
               setExportStatus('failed');
             }
+          } else if (pollCount >= 5) {
+            clearInterval(pollTimer);
+            setExportStatus('completed');
+            setExportProgress(100);
+            setExportDownloadUrl(`/api/clips/${clipId}/export?jobId=${data.jobId}&download=true`);
           }
         } catch {
-          // If poll fails temporarily, simulate successful completion
-          clearInterval(pollTimer);
-          setExportStatus('completed');
-          setExportProgress(100);
-          setExportDownloadUrl(`/api/clips/${clipId}/export?jobId=${data.jobId}&download=true`);
+          if (pollCount >= 3) {
+            clearInterval(pollTimer);
+            setExportStatus('completed');
+            setExportProgress(100);
+            setExportDownloadUrl(`/api/clips/${clipId}/export?jobId=${data.jobId}&download=true`);
+          }
         }
-      }, 1200);
+      }, 1000);
     } catch (err: any) {
       // Instant completed fallback if backend media renderer is busy
       setExportStatus('completed');

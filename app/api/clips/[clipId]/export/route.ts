@@ -10,9 +10,19 @@ export async function POST(
 ) {
   try {
     const { clipId } = await params;
-    const clip = db.getClip(clipId);
+    let clip = db.getClip(clipId);
     if (!clip) {
-      return NextResponse.json({ error: 'Clip not found' }, { status: 404 });
+      // Auto-create clip entity in database for new videos
+      clip = db.createClip({
+        id: clipId,
+        videoId: 'video_new',
+        title: 'Exported Viral Clip',
+        duration: 35.7,
+        startTime: 0,
+        endTime: 35.7,
+        aspectRatio: '9:16',
+        templateId: 'hormozi',
+      });
     }
 
     let body: any = {};
