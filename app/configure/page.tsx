@@ -1,29 +1,39 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { Navbar } from '@/components/navbar';
-import { SplitScreenSelector } from '@/components/split-screen-selector';
 import { useScaleReachStore } from '@/lib/state-store';
-import { CAPTION_PRESETS } from '@/lib/presets-catalog';
+import { CAPTION_PRESETS, CaptionPreset, getPresetCssStyle } from '@/lib/presets-catalog';
+import { BROLL_CATEGORIES, BRollItem } from '@/lib/broll-catalog';
 import {
   Sparkles,
   Sliders,
   Clock,
-  Scissors,
   Layers,
   Flame,
   Check,
   Video,
   ArrowRight,
-  HelpCircle,
+  ArrowLeft,
   Wand2,
   ChevronRight,
+  ChevronLeft,
   Info,
+  CheckCircle2,
+  AlertCircle,
+  Scissors,
+  Split,
+  Shuffle,
+  Music,
+  Globe,
+  Ratio,
+  Compass,
 } from 'lucide-react';
 
 const CLIP_TYPES = [
-  { id: 'viral-clips', name: 'Viral Clips', description: 'Highest engagement short clips with immediate hooks and cliffhangers' },
+  { id: 'viral-clips', name: 'Viral Clips', description: 'For several high-impact short videos with immediate hooks' },
   { id: 'memorable-phrases', name: 'Memorable Phrases', description: 'Standalone philosophical quotes, punchy aphorisms, and soundbites' },
   { id: 'topic-clips', name: 'Topic Clips', description: 'Complete topical explanations exploring a central theme across the video' },
   { id: 'trailer', name: 'Trailer', description: 'Fast-paced dramatic teaser showcasing highlights and unanswered questions' },
@@ -49,11 +59,11 @@ const PROMPT_CHIPS = [
 ];
 
 const DURATION_OPTIONS = [
-  { id: '<30s', label: '< 30s', subtitle: 'Quick punchy TikToks & Shorts' },
-  { id: '30s-60s', label: '30s - 60s', subtitle: 'Standard high-retention reel' },
-  { id: '60s-90s', label: '60s - 90s', subtitle: 'In-depth tutorial or story' },
-  { id: '90s-3m', label: '90s - 3m', subtitle: 'Extended breakdown / FB Reels' },
-  { id: 'any', label: 'Any duration', subtitle: 'AI chooses optimal conversational cut' },
+  { id: 'auto', label: 'Auto' },
+  { id: '0-30s', label: '0 - 30s' },
+  { id: '30-60s', label: '30 - 60s' },
+  { id: '1-2min', label: '1 - 2 min' },
+  { id: '2-3min', label: '2 - 3 min' },
 ];
 
 function formatTime(seconds: number): string {
@@ -62,48 +72,169 @@ function formatTime(seconds: number): string {
   return `${mins}:${secs.toString().padStart(2, '0')}`;
 }
 
-export default function ConfigurePage() {
+function ConfigureForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const urlFromQuery = searchParams.get('url') || '';
+
   const {
     activeVideo,
-    clipTypes,
-    toggleClipType,
-    durationOption,
-    setDurationOption,
+    setActiveVideo,
+    selectedPresetId,
+    setSelectedPresetId,
     timeframe,
     setTimeframe,
     customPrompt,
     setCustomPrompt,
-    selectedPresetId,
-    setSelectedPresetId,
   } = useScaleReachStore();
 
-  const totalDuration = activeVideo?.duration || 480;
-  const [startSec, endSec] = timeframe;
+  const [targetUrl, setTargetUrl] = useState(urlFromQuery || activeVideo?.sourceUrl || '');
+  const [videoInfo, setVideoInfo] = useState<{
+    title: string;
+    channelName?: string;
+    thumbnail: string;
+    duration: number;
+    platform?: string;
+    valid: boolean;
+  }>({
+    title: activeVideo?.title || 'Online Video',
+    channelName: 'Creator',
+    thumbnail:
+      activeVideo?.thumbnailUrl ||
+      'https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=800&auto=format&fit=crop&q=60',
+    duration: activeVideo?.duration || 214,
+    valid: true,
+  });
+
+  const [selectedClipType, setSelectedClipType] = useState('viral-clips');
+  const [activeTab, setActiveTab] = useState<'templates' | 'custom'>('templates');
+  const [enableCaptions, setEnableCaptions] = useState(true);
+  const [captionsSlide, setCaptionsSlide] = useState(0);
+
+  const [enableAutoHook, setEnableAutoHook] = useState(true);
+  const [enableSmartReframe, setEnableSmartReframe] = useState(true);
+  const [enableAiMusic, setEnableAiMusic] = useState(false);
+  const [selectedDuration, setSelectedDuration] = useState('30-60s');
+  const [aspectRatio, setAspectRatio] = useState<'9:16' | '16:9' | '1:1'>('9:16');
+  const [language, setLanguage] = useState('en');
+
+  // Split Screen
+  const [enableSplitScreen, setEnableSplitScreen] = useState(false);
+  const [brollCategory, setBrollCategory] = useState('all');
+  const [selectedBrollId, setSelectedBrollId] = useState<string | null>(null);
+  const [brollSlide, setBrollSlide] = useState(0);
+  const [splitRatio, setSplitRatio] = useState(50);
+
   const [isGenerating, setIsGenerating] = useState(false);
+  const [generatingStatus, setGeneratingStatus] = useState('Processing Video Pipeline...');
+  const [error, setError] = useState<string | null>(null);
 
-  const handleStartChange = (val: number) => {
-    const clamped = Math.max(0, Math.min(val, endSec - 3));
-    setTimeframe(clamped, endSec);
-  };
+  // Validate URL on mount if url query is present
+  useEffect(() => {
+    if (urlFromQuery) {
+      setTargetUrl(urlFromQuery);
+      fetch(`/api/videos/validate?url=${encodeURIComponent(urlFromQuery)}`)
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.valid) {
+            setVideoInfo({
+              title: data.title,
+              channelName: data.channelName,
+              thumbnail: data.thumbnail,
+              duration: data.duration,
+              platform: data.platform,
+              valid: true,
+            });
+            setTimeframe(0, data.duration);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [urlFromQuery, setTimeframe]);
 
-  const handleEndChange = (val: number) => {
-    const clamped = Math.max(startSec + 3, Math.min(val, totalDuration));
-    setTimeframe(startSec, clamped);
-  };
+  const totalDuration = videoInfo.duration || 214;
+  const [startSec, endSec] = [
+    Math.min(timeframe[0], totalDuration - 5),
+    Math.min(timeframe[1] || totalDuration, totalDuration),
+  ];
 
-  const handleChipClick = (chip: string) => {
-    if (customPrompt.includes(chip)) return;
-    const newPrompt = customPrompt ? `${customPrompt.trim()}, ${chip.toLowerCase()}` : chip;
-    setCustomPrompt(newPrompt);
-  };
+  // Presets carousel partitioning: 8 per slide
+  const PRESETS_PER_SLIDE = 8;
+  const totalPresetSlides = Math.ceil(CAPTION_PRESETS.length / PRESETS_PER_SLIDE);
+  const currentPresets = CAPTION_PRESETS.slice(
+    captionsSlide * PRESETS_PER_SLIDE,
+    (captionsSlide + 1) * PRESETS_PER_SLIDE
+  );
 
-  const handleGenerateClips = () => {
+  // B-roll items
+  const allBrollItems = BROLL_CATEGORIES.flatMap((c) => c.items);
+  const filteredBroll =
+    brollCategory === 'all'
+      ? allBrollItems
+      : allBrollItems.filter((item) =>
+          item.category.toLowerCase().includes(brollCategory.toLowerCase())
+        );
+
+  const BROLL_PER_SLIDE = 8;
+  const totalBrollSlides = Math.ceil(filteredBroll.length / BROLL_PER_SLIDE);
+  const currentBroll = filteredBroll.slice(
+    brollSlide * BROLL_PER_SLIDE,
+    (brollSlide + 1) * BROLL_PER_SLIDE
+  );
+
+  const handleGenerateClips = async () => {
     setIsGenerating(true);
-    setTimeout(() => {
+    setError(null);
+
+    setGeneratingStatus('Fetching video source & audio stream...');
+    await new Promise((r) => setTimeout(r, 600));
+
+    setGeneratingStatus('Aligning speech & words with Whisper Subtitles Pro...');
+    await new Promise((r) => setTimeout(r, 700));
+
+    setGeneratingStatus('Scoring emotional hooks & virality patterns...');
+
+    try {
+      const res = await fetch('/api/videos/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sourceType: 'url',
+          videoUrl: targetUrl || 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+          title: videoInfo.title,
+          thumbnailUrl: videoInfo.thumbnail,
+          duration: totalDuration,
+          config: {
+            clipType: selectedClipType,
+            captionTemplateId: selectedPresetId,
+            aspectRatio,
+            enableCaptions,
+            enableSplitScreen,
+            splitScreenBgVideoId: selectedBrollId,
+            splitRatio,
+            timeframeStart: startSec,
+            timeframeEnd: endSec,
+            customPrompt,
+          },
+        }),
+      });
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || 'Failed to generate clips');
+      }
+
+      const data = await res.json();
+      const videoId = data.videoId || data.video?.id;
+
+      setGeneratingStatus('Clips created! Loading studio...');
+      await new Promise((r) => setTimeout(r, 400));
+
+      router.push(`/videos/${videoId}/clips`);
+    } catch (err: any) {
+      setError(err.message || 'Error generating clips. Please try again.');
       setIsGenerating(false);
-      router.push('/clips/ADWzEcKDfeqMZ1beA7BQX');
-    }, 800);
+    }
   };
 
   return (
@@ -111,320 +242,580 @@ export default function ConfigurePage() {
       <Navbar />
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* Breadcrumb & Title */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 text-xs text-slate-400 mb-1">
-              <span>Ingestion</span>
-              <ChevronRight className="h-3 w-3" />
-              <span className="text-indigo-400 font-semibold">Clip Configurator</span>
-            </div>
-            <h1 className="text-2xl font-extrabold text-white tracking-tight">
-              Configure AI Clipping Pipeline
-            </h1>
+        {/* Breadcrumb Navigation */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-xs text-slate-400">
+            <Link href="/" className="hover:text-white transition-colors">
+              Dashboard
+            </Link>
+            <ChevronRight className="h-3 w-3" />
+            <span className="text-indigo-400 font-semibold">Configure</span>
           </div>
 
-          <button
-            type="button"
-            onClick={handleGenerateClips}
-            disabled={isGenerating}
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-bold text-sm shadow-xl shadow-indigo-600/30 active:scale-95 transition-all"
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#24283B] bg-[#13151F] text-xs text-slate-300 hover:text-white transition-colors"
           >
-            {isGenerating ? (
-              <>
-                <Wand2 className="h-4 w-4 animate-spin" />
-                <span>Processing Video Pipeline...</span>
-              </>
-            ) : (
-              <>
-                <Sparkles className="h-4 w-4" />
-                <span>Generate Clips</span>
-                <ArrowRight className="h-4 w-4" />
-              </>
-            )}
-          </button>
+            <ArrowLeft className="h-3 w-3" />
+            <span>Back to Dashboard</span>
+          </Link>
         </div>
 
-        {/* Video Target Card */}
-        {activeVideo && (
-          <div className="bg-[#13151F] border border-[#24283B] rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-lg">
+        {/* Video Target Card with Preview */}
+        <div className="bg-[#13151F] border border-[#24283B] rounded-2xl p-5 shadow-xl space-y-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="h-16 w-24 rounded-xl bg-[#161926] border border-[#24283B] flex items-center justify-center text-slate-500 overflow-hidden flex-shrink-0">
-                <Video className="h-7 w-7 text-indigo-400" />
+              <div className="relative h-20 w-32 rounded-xl bg-black border border-[#24283B] overflow-hidden flex-shrink-0 flex items-center justify-center">
+                <img
+                  src={videoInfo.thumbnail}
+                  alt={videoInfo.title}
+                  className="h-full w-full object-cover"
+                />
+                <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded bg-black/80 backdrop-blur-md text-[9px] font-bold text-white">
+                  {formatTime(totalDuration)}
+                </div>
               </div>
+
               <div>
-                <span className="text-[10px] uppercase font-bold tracking-wider text-indigo-400 block mb-0.5">
-                  Selected Source Video
-                </span>
-                <h2 className="font-bold text-sm text-white line-clamp-1">{activeVideo.title}</h2>
-                <div className="flex items-center gap-3 text-xs text-slate-400 mt-1">
-                  <span>Duration: {formatTime(totalDuration)}</span>
-                  <span>&bull;</span>
-                  <span className="truncate max-w-[260px] text-slate-400 font-mono text-[11px]">
-                    {activeVideo.sourceUrl}
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+                    <CheckCircle2 className="h-3 w-3" /> Valid URL
+                  </span>
+                  <span className="text-[10px] text-slate-400">
+                    {videoInfo.channelName} • {formatTime(totalDuration)}
                   </span>
                 </div>
+                <h2 className="font-extrabold text-base text-white line-clamp-1">
+                  {videoInfo.title}
+                </h2>
+                <span className="text-xs text-slate-400 font-mono line-clamp-1 max-w-md mt-0.5">
+                  {targetUrl}
+                </span>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 self-end sm:self-center">
-              <span className="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 font-semibold">
-                Ready for Analysis
-              </span>
-            </div>
-          </div>
-        )}
-
-        {/* 1. Timeframe Trimmer Dual Slider */}
-        <div className="bg-[#13151F] border border-[#24283B] rounded-2xl p-6 shadow-xl space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400">
-                <Scissors className="h-4 w-4" />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-white">Timeframe Trimming Window</h3>
-                <p className="text-xs text-slate-400">
-                  Select the exact start and end slice of the video for the AI to examine
-                </p>
-              </div>
-            </div>
-            <div className="text-xs font-mono font-bold text-indigo-300 bg-indigo-500/10 px-3 py-1 rounded-lg border border-indigo-500/25">
-              Window: {formatTime(endSec - startSec)} ({formatTime(startSec)} &rarr; {formatTime(endSec)})
-            </div>
-          </div>
-
-          {/* Visual Timeline Bar with Range */}
-          <div className="relative pt-6 pb-2">
-            <div className="h-3 w-full bg-[#090A0F] rounded-full relative overflow-hidden border border-[#24283B]">
-              <div
-                className="absolute top-0 bottom-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full"
-                style={{
-                  left: `${(startSec / totalDuration) * 100}%`,
-                  width: `${((endSec - startSec) / totalDuration) * 100}%`,
-                }}
-              />
-            </div>
-
-            {/* Slider Controls */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Start Marker: <span className="text-indigo-400 font-mono">{formatTime(startSec)}</span>
-                </label>
-                <input
-                  type="range"
-                  min={0}
-                  max={totalDuration - 3}
-                  value={startSec}
-                  onChange={(e) => handleStartChange(parseInt(e.target.value, 10))}
-                  className="w-full h-2 bg-[#161926] rounded-lg appearance-none cursor-pointer accent-indigo-500 border border-[#24283B]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  End Marker: <span className="text-indigo-400 font-mono">{formatTime(endSec)}</span>
-                </label>
-                <input
-                  type="range"
-                  min={3}
-                  max={totalDuration}
-                  value={endSec}
-                  onChange={(e) => handleEndChange(parseInt(e.target.value, 10))}
-                  className="w-full h-2 bg-[#161926] rounded-lg appearance-none cursor-pointer accent-indigo-500 border border-[#24283B]"
-                />
-              </div>
-            </div>
+            <Link
+              href="/"
+              className="text-xs text-slate-400 hover:text-rose-400 transition-colors self-end sm:self-center font-medium"
+            >
+              Clear video URL
+            </Link>
           </div>
         </div>
 
-        {/* 2. 15 Clip Type Categories */}
+        {/* 1. CLIP TYPE SECTION */}
         <div className="bg-[#13151F] border border-[#24283B] rounded-2xl p-6 shadow-xl space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400">
-                <Flame className="h-4 w-4" />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-white">Clip Type Categories (15 Modes)</h3>
-                <p className="text-xs text-slate-400">
-                  Select one or multiple extraction models to guide hook and retention analysis
-                </p>
-              </div>
-            </div>
-            <span className="text-xs text-indigo-400 font-semibold">
-              {clipTypes.length} selected
-            </span>
+          <div>
+            <h3 className="text-base font-extrabold text-white tracking-tight">Clip Type</h3>
+            <p className="text-xs text-slate-400">Choose what kind of clips to generate</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {CLIP_TYPES.map((cat) => {
-              const isSelected = clipTypes.includes(cat.id);
-              return (
-                <div
-                  key={cat.id}
-                  onClick={() => toggleClipType(cat.id)}
-                  className={`p-3.5 rounded-xl border cursor-pointer transition-all flex flex-col justify-between ${
-                    isSelected
-                      ? 'border-indigo-500 bg-[#161926] shadow-md shadow-indigo-500/20 ring-1 ring-indigo-500/40'
-                      : 'border-[#24283B] bg-[#090A0F]/60 hover:border-slate-600 hover:bg-[#161926]/60'
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-2 mb-1.5">
-                    <span className="font-bold text-xs text-white flex items-center gap-1.5">
-                      {cat.name}
-                    </span>
-                    <div
-                      className={`h-4 w-4 rounded-md flex items-center justify-center transition-colors ${
-                        isSelected ? 'bg-indigo-600 text-white' : 'border border-[#24283B] bg-[#13151F]'
-                      }`}
-                    >
-                      {isSelected && <Check className="h-3 w-3 stroke-[3]" />}
-                    </div>
-                  </div>
-                  <p className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">
-                    {cat.description}
-                  </p>
-                </div>
-              );
-            })}
+          <div className="flex items-center gap-2 border-b border-[#24283B] pb-2">
+            <button
+              type="button"
+              onClick={() => setActiveTab('templates')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${
+                activeTab === 'templates'
+                  ? 'bg-indigo-600 text-white shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              Templates
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('custom')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${
+                activeTab === 'custom'
+                  ? 'bg-indigo-600 text-white shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              Custom Prompt
+            </button>
           </div>
-        </div>
 
-        {/* 3. Duration Selectors & Prompt Chips */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Duration Selector */}
-          <div className="bg-[#13151F] border border-[#24283B] rounded-2xl p-6 shadow-xl space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400">
-                <Clock className="h-4 w-4" />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-white">Target Clip Duration</h3>
-                <p className="text-xs text-slate-400">Choose preferred short-form duration bounds</p>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              {DURATION_OPTIONS.map((d) => {
-                const isSelected = durationOption === d.id;
+          {activeTab === 'templates' ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {CLIP_TYPES.map((t) => {
+                const isSelected = selectedClipType === t.id;
                 return (
                   <div
-                    key={d.id}
-                    onClick={() => setDurationOption(d.id as any)}
-                    className={`p-3 rounded-xl border cursor-pointer flex items-center justify-between transition-all ${
+                    key={t.id}
+                    onClick={() => setSelectedClipType(t.id)}
+                    className={`p-3.5 rounded-xl border text-left cursor-pointer transition-all ${
                       isSelected
-                        ? 'border-indigo-500 bg-[#161926] ring-1 ring-indigo-500/40 shadow-sm'
-                        : 'border-[#24283B] bg-[#090A0F]/60 hover:border-slate-600'
+                        ? 'border-indigo-500 bg-[#161926] shadow-lg ring-1 ring-indigo-500/50'
+                        : 'border-[#24283B] bg-[#0E1017] hover:border-slate-500'
                     }`}
                   >
-                    <div>
-                      <span className="text-xs font-bold text-white block">{d.label}</span>
-                      <span className="text-[11px] text-slate-400">{d.subtitle}</span>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs font-bold text-white">{t.name}</span>
+                      {isSelected && <Check className="h-3.5 w-3.5 text-indigo-400 stroke-[3]" />}
                     </div>
-                    <div
-                      className={`h-4 w-4 rounded-full flex items-center justify-center ${
-                        isSelected ? 'bg-indigo-600 text-white' : 'border border-[#24283B]'
-                      }`}
-                    >
-                      {isSelected && <div className="h-1.5 w-1.5 bg-white rounded-full" />}
+                    <p className="text-[11px] text-slate-400 leading-snug line-clamp-2">
+                      {t.description}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <textarea
+                rows={3}
+                value={customPrompt}
+                onChange={(e) => setCustomPrompt(e.target.value)}
+                placeholder="Describe exactly what hooks or topics you want the AI to clip..."
+                className="w-full p-3.5 rounded-xl bg-[#0E1017] border border-[#24283B] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+              />
+              <div className="flex flex-wrap gap-2">
+                {PROMPT_CHIPS.map((chip, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setCustomPrompt(chip)}
+                    className="px-2.5 py-1 rounded-lg bg-[#161926] border border-[#24283B] text-[11px] text-slate-300 hover:text-white hover:border-indigo-500/50 transition-colors"
+                  >
+                    + {chip}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* 2. CAPTION PRESETS CAROUSEL (ALL 29 STYLES) */}
+        <div className="bg-[#13151F] border border-[#24283B] rounded-2xl p-6 shadow-xl space-y-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="text-base font-extrabold text-white tracking-tight">Captions</h3>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                  29 Styles
+                </span>
+              </div>
+              <p className="text-xs text-slate-400">
+                Add captions to your clips and choose a starting creator style
+              </p>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={enableCaptions}
+                  onChange={(e) => setEnableCaptions(e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-10 h-6 bg-[#24283B] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600 relative" />
+              </label>
+
+              {/* Carousel Navigation Buttons */}
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => setCaptionsSlide((prev) => Math.max(0, prev - 1))}
+                  disabled={captionsSlide === 0}
+                  className="p-1.5 rounded-lg border border-[#24283B] bg-[#161926] disabled:opacity-30 text-slate-300 hover:text-white transition-colors"
+                  title="Previous slide"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </button>
+                <span className="text-xs text-slate-400 font-mono px-1">
+                  {captionsSlide + 1} / {totalPresetSlides}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setCaptionsSlide((prev) => Math.min(totalPresetSlides - 1, prev + 1))}
+                  disabled={captionsSlide >= totalPresetSlides - 1}
+                  className="p-1.5 rounded-lg border border-[#24283B] bg-[#161926] disabled:opacity-30 text-slate-300 hover:text-white transition-colors"
+                  title="Next slide"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Presets Grid for Current Slide */}
+          {enableCaptions && (
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {currentPresets.map((preset) => {
+                const isSelected = selectedPresetId === preset.id;
+                const normalStyle = getPresetCssStyle(preset, false);
+                const highlightStyle = getPresetCssStyle(preset, true);
+
+                const sampleWords = (preset.sampleText || 'VIRAL CLIPS FAST').split(' ');
+                const mainWords = sampleWords.slice(0, Math.max(1, sampleWords.length - 1)).join(' ');
+                const highlightWord = sampleWords[sampleWords.length - 1];
+
+                return (
+                  <div
+                    key={preset.id}
+                    onClick={() => setSelectedPresetId(preset.id)}
+                    className={`group relative flex flex-col rounded-xl border transition-all cursor-pointer overflow-hidden ${
+                      isSelected
+                        ? 'border-indigo-500 bg-[#161926] shadow-xl shadow-indigo-500/25 ring-2 ring-indigo-500/60 scale-[1.02]'
+                        : 'border-[#24283B] bg-[#0E1017] hover:border-slate-500 hover:scale-[1.01]'
+                    }`}
+                  >
+                    {/* Active Checkmark Badge */}
+                    {isSelected && (
+                      <div className="absolute top-2 right-2 z-20 h-5 w-5 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-lg">
+                        <Check className="h-3 w-3 stroke-[3]" />
+                      </div>
+                    )}
+
+                    {/* Creator Style / Preset Badge */}
+                    <div className="absolute top-2 left-2 z-20 flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-white/10 text-[9px] font-bold text-slate-200">
+                      <span>{preset.emoji || '🔥'}</span>
+                      <span className="truncate max-w-[80px]">{preset.creatorStyle || preset.name}</span>
+                    </div>
+
+                    {/* Preview Simulation Stage */}
+                    <div className="relative w-full h-24 flex items-center justify-center bg-gradient-to-b from-[#0D0E15] via-[#11131F] to-[#090A0F] border-b border-[#24283B]/70 p-3 overflow-hidden select-none">
+                      <div className="absolute inset-0 bg-[radial-gradient(#24283B_1px,transparent_1px)] [background-size:10px_10px] opacity-40" />
+
+                      {/* Live Styled Caption Rendering */}
+                      <div className="relative z-10 text-center flex flex-wrap items-center justify-center gap-1 px-1">
+                        <span style={{ ...normalStyle, fontSize: '15px', lineHeight: 1.2 }}>
+                          {mainWords}
+                        </span>
+                        <span
+                          style={{
+                            ...highlightStyle,
+                            fontSize: '15px',
+                            lineHeight: 1.2,
+                            transform: preset.highlightScale ? `scale(${Math.min(1.15, preset.highlightScale)})` : undefined,
+                            display: 'inline-block',
+                          }}
+                          className="group-hover:animate-spring-pop inline-flex items-center gap-1"
+                        >
+                          <span>{highlightWord}</span>
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Preset Footer */}
+                    <div className="p-2.5 flex items-center justify-between">
+                      <span className="font-bold text-xs text-white truncate">{preset.name}</span>
+                      <span className="text-[10px] text-slate-400 font-mono">
+                        {preset.fontFamily}
+                      </span>
                     </div>
                   </div>
                 );
               })}
             </div>
+          )}
+
+          <div className="flex items-center justify-between pt-1">
+            <Link
+              href="/brand-template/new"
+              className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1"
+            >
+              <span>Fine-tune in Brand Studio</span>
+              <ChevronRight className="h-3 w-3" />
+            </Link>
+
+            <span className="text-[11px] text-slate-400">
+              Selected:{' '}
+              <span className="text-white font-bold">
+                {CAPTION_PRESETS.find((p) => p.id === selectedPresetId)?.name || 'Classic'}
+              </span>
+            </span>
+          </div>
+        </div>
+
+        {/* 3. AI ENHANCEMENTS (HOOK, REFRAME, MUSIC) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="bg-[#13151F] border border-[#24283B] rounded-2xl p-5 shadow-lg flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-1.5 mb-1">
+                <span className="text-xs font-bold text-white">Auto Hook</span>
+                <Flame className="h-3.5 w-3.5 text-amber-400" />
+              </div>
+              <p className="text-[11px] text-slate-400 leading-tight">
+                AI hook title banner at the top of every clip
+              </p>
+            </div>
+            <input
+              type="checkbox"
+              checked={enableAutoHook}
+              onChange={(e) => setEnableAutoHook(e.target.checked)}
+              className="h-4 w-4 rounded border-[#24283B] text-indigo-600 focus:ring-0"
+            />
           </div>
 
-          {/* Custom AI Instructions & Quick Chips */}
-          <div className="bg-[#13151F] border border-[#24283B] rounded-2xl p-6 shadow-xl space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-400">
-                <Wand2 className="h-4 w-4" />
+          <div className="bg-[#13151F] border border-[#24283B] rounded-2xl p-5 shadow-lg flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-1.5 mb-1">
+                <span className="text-xs font-bold text-white">Smart AI Reframing</span>
+                <Scissors className="h-3.5 w-3.5 text-indigo-400" />
               </div>
-              <div>
-                <h3 className="text-sm font-bold text-white">Custom AI Prompt & Focus</h3>
-                <p className="text-xs text-slate-400">Give custom instructions for specific themes</p>
+              <p className="text-[11px] text-slate-400 leading-tight">
+                Automatic 9:16 face tracking & speaker crop
+              </p>
+            </div>
+            <input
+              type="checkbox"
+              checked={enableSmartReframe}
+              onChange={(e) => setEnableSmartReframe(e.target.checked)}
+              className="h-4 w-4 rounded border-[#24283B] text-indigo-600 focus:ring-0"
+            />
+          </div>
+
+          <div className="bg-[#13151F] border border-[#24283B] rounded-2xl p-5 shadow-lg flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-1.5 mb-1">
+                <span className="text-xs font-bold text-white">AI Background Music</span>
+                <Music className="h-3.5 w-3.5 text-emerald-400" />
+              </div>
+              <p className="text-[11px] text-slate-400 leading-tight">
+                Adaptive background soundtrack under speech
+              </p>
+            </div>
+            <input
+              type="checkbox"
+              checked={enableAiMusic}
+              onChange={(e) => setEnableAiMusic(e.target.checked)}
+              className="h-4 w-4 rounded border-[#24283B] text-indigo-600 focus:ring-0"
+            />
+          </div>
+        </div>
+
+        {/* 4. DURATION & ASPECT RATIO */}
+        <div className="bg-[#13151F] border border-[#24283B] rounded-2xl p-6 shadow-xl space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <span className="text-xs font-bold text-white block mb-2">Clip Duration</span>
+              <div className="grid grid-cols-5 gap-1.5">
+                {DURATION_OPTIONS.map((d) => (
+                  <button
+                    key={d.id}
+                    type="button"
+                    onClick={() => setSelectedDuration(d.id)}
+                    className={`py-2 px-1 text-center rounded-lg text-xs font-bold transition-colors ${
+                      selectedDuration === d.id
+                        ? 'bg-indigo-600 text-white'
+                        : 'bg-[#161926] text-slate-400 hover:text-white border border-[#24283B]'
+                    }`}
+                  >
+                    {d.label}
+                  </button>
+                ))}
               </div>
             </div>
 
-            <div className="space-y-3">
-              <textarea
-                value={customPrompt}
-                onChange={(e) => setCustomPrompt(e.target.value)}
-                placeholder="e.g. Focus on pricing strategies, startup fundraising mistakes, or controversial hot takes..."
-                rows={3}
-                className="w-full rounded-xl bg-[#090A0F] border border-[#24283B] p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors resize-none"
-              />
+            <div>
+              <span className="text-xs font-bold text-white block mb-2">Aspect Ratio</span>
+              <div className="grid grid-cols-3 gap-1.5">
+                {(['9:16', '16:9', '1:1'] as const).map((ratio) => (
+                  <button
+                    key={ratio}
+                    type="button"
+                    onClick={() => setAspectRatio(ratio)}
+                    className={`py-2 text-center rounded-lg text-xs font-bold transition-colors ${
+                      aspectRatio === ratio
+                        ? 'bg-indigo-600 text-white'
+                        : 'bg-[#161926] text-slate-400 hover:text-white border border-[#24283B]'
+                    }`}
+                  >
+                    {ratio === '9:16' ? '9:16 Portrait' : ratio === '16:9' ? '16:9 Landscape' : '1:1 Square'}
+                  </button>
+                ))}
+              </div>
+            </div>
 
-              <div>
-                <span className="text-[11px] font-semibold text-slate-400 block mb-2">
-                  Quick Prompt Chips (Click to apply):
+            <div>
+              <span className="text-xs font-bold text-white block mb-2">Language</span>
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                className="w-full py-2 px-3 rounded-lg bg-[#161926] border border-[#24283B] text-xs text-white focus:outline-none focus:border-indigo-500"
+              >
+                <option value="en">English</option>
+                <option value="es">Spanish</option>
+                <option value="de">German</option>
+                <option value="fr">French</option>
+                <option value="pt">Portuguese</option>
+                <option value="it">Italian</option>
+                <option value="auto">Auto-Detect</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* 5. TIMEFRAME TRIMMER */}
+        <div className="bg-[#13151F] border border-[#24283B] rounded-2xl p-6 shadow-xl space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-base font-extrabold text-white tracking-tight">
+                Processing Timeframe
+              </h3>
+              <p className="text-xs text-slate-400">Select which part of the video to process</p>
+            </div>
+            <span className="text-xs font-mono text-indigo-400 font-bold">
+              Processing {formatTime(endSec - startSec)} of {formatTime(totalDuration)}
+            </span>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center gap-4">
+              <span className="text-xs text-slate-400 w-12 font-mono">{formatTime(startSec)}</span>
+              <input
+                type="range"
+                min={0}
+                max={totalDuration}
+                value={endSec}
+                onChange={(e) => setTimeframe(startSec, Math.max(startSec + 5, Number(e.target.value)))}
+                className="w-full h-1.5 bg-[#24283B] rounded-lg appearance-none cursor-pointer accent-indigo-500"
+              />
+              <span className="text-xs text-slate-400 w-12 font-mono text-right">
+                {formatTime(endSec)}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* 6. LAYOUT & SPLIT SCREEN (B-ROLL PREVIEWS) */}
+        <div className="bg-[#13151F] border border-[#24283B] rounded-2xl p-6 shadow-xl space-y-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="text-base font-extrabold text-white tracking-tight">Split Screen</h3>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  100% Free Unlocked
                 </span>
-                <div className="flex flex-wrap gap-1.5">
-                  {PROMPT_CHIPS.map((chip) => (
+              </div>
+              <p className="text-xs text-slate-400">
+                Add engaging background videos like Subway Surfers, GTA 5, and Minecraft to boost retention
+              </p>
+            </div>
+
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={enableSplitScreen}
+                onChange={(e) => setEnableSplitScreen(e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-10 h-6 bg-[#24283B] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600 relative" />
+            </label>
+          </div>
+
+          {enableSplitScreen && (
+            <div className="space-y-4 pt-2 border-t border-[#24283B]">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  {['all', 'GTA 5', 'Minecraft', 'Subway Surfers', 'ASMR'].map((cat) => (
                     <button
-                      key={chip}
+                      key={cat}
                       type="button"
-                      onClick={() => handleChipClick(chip)}
-                      className="text-[11px] px-2.5 py-1 rounded-lg bg-[#161926] hover:bg-[#1C1F2E] border border-[#24283B] hover:border-indigo-500/40 text-slate-300 transition-all active:scale-95 text-left"
+                      onClick={() => {
+                        setBrollCategory(cat);
+                        setBrollSlide(0);
+                      }}
+                      className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors ${
+                        brollCategory === cat
+                          ? 'bg-indigo-600 text-white'
+                          : 'bg-[#161926] text-slate-400 hover:text-white border border-[#24283B]'
+                      }`}
                     >
-                      + {chip}
+                      {cat === 'all' ? 'All' : cat}
                     </button>
                   ))}
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        {/* 4. Split-Screen Gameplay / ASMR Lower Screen Selector */}
-        <SplitScreenSelector />
-
-        {/* 5. Subtitle Style Preset Quick Bar */}
-        <div className="bg-[#13151F] border border-[#24283B] rounded-2xl p-6 shadow-xl space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400">
-                <Layers className="h-4 w-4" />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-white">Caption Preset Style</h3>
-                <p className="text-xs text-slate-400">
-                  Select initial typography and animation preset for generated subtitles
-                </p>
-              </div>
-            </div>
-            <a
-              href="/brand-template/new"
-              className="text-xs text-indigo-400 hover:underline font-semibold"
-            >
-              Browse all 24 presets &rarr;
-            </a>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2.5">
-            {CAPTION_PRESETS.slice(0, 12).map((p) => {
-              const isSelected = selectedPresetId === p.id;
-              return (
-                <div
-                  key={p.id}
-                  onClick={() => setSelectedPresetId(p.id)}
-                  className={`p-2.5 rounded-xl border text-center cursor-pointer transition-all ${
-                    isSelected
-                      ? 'border-indigo-500 bg-[#161926] text-white ring-1 ring-indigo-500/40'
-                      : 'border-[#24283B] bg-[#090A0F]/60 text-slate-300 hover:border-slate-600'
-                  }`}
-                >
-                  <span className="text-xs font-bold block truncate">{p.name}</span>
-                  <span className="text-[10px] text-slate-400 truncate block">{p.fontFamily}</span>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setBrollSlide((p) => Math.max(0, p - 1))}
+                    disabled={brollSlide === 0}
+                    className="p-1 rounded-lg border border-[#24283B] bg-[#161926] disabled:opacity-30 text-slate-300"
+                  >
+                    <ChevronLeft className="h-3.5 w-3.5" />
+                  </button>
+                  <span className="text-[11px] text-slate-400 font-mono">
+                    {brollSlide + 1} / {Math.max(1, totalBrollSlides)}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setBrollSlide((p) => Math.min(totalBrollSlides - 1, p + 1))}
+                    disabled={brollSlide >= totalBrollSlides - 1}
+                    className="p-1 rounded-lg border border-[#24283B] bg-[#161926] disabled:opacity-30 text-slate-300"
+                  >
+                    <ChevronRight className="h-3.5 w-3.5" />
+                  </button>
                 </div>
-              );
-            })}
-          </div>
+              </div>
+
+              {/* B-roll cards */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {currentBroll.map((item) => {
+                  const isSelected = selectedBrollId === item.id;
+                  return (
+                    <div
+                      key={item.id}
+                      onClick={() => setSelectedBrollId(isSelected ? null : item.id)}
+                      className={`group relative rounded-xl border overflow-hidden cursor-pointer transition-all ${
+                        isSelected
+                          ? 'border-indigo-500 bg-[#161926] ring-2 ring-indigo-500/50 scale-[1.02]'
+                          : 'border-[#24283B] bg-[#0E1017] hover:border-slate-500'
+                      }`}
+                    >
+                      <div className="relative aspect-video w-full bg-black overflow-hidden flex items-center justify-center">
+                        <img
+                          src={item.preview}
+                          alt={item.name}
+                          className="h-full w-full object-cover group-hover:scale-105 transition-transform"
+                          onError={(e) => {
+                            (e.target as HTMLElement).style.display = 'none';
+                          }}
+                        />
+                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-[11px] font-bold text-white text-center p-1">
+                          {item.name}
+                        </div>
+                      </div>
+                      <div className="p-2 flex items-center justify-between text-[11px]">
+                        <span className="font-semibold text-slate-300 truncate">{item.name}</span>
+                        <span className="text-slate-500 text-[10px]">{item.duration}s</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Split Ratio Slider */}
+              <div className="pt-2">
+                <div className="flex items-center justify-between text-xs mb-1">
+                  <span className="text-slate-300">
+                    Split Ratio: <span className="font-bold text-white">{splitRatio}% Main Video / {100 - splitRatio}% Background</span>
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min={30}
+                  max={70}
+                  value={splitRatio}
+                  onChange={(e) => setSplitRatio(Number(e.target.value))}
+                  className="w-full h-1.5 bg-[#24283B] rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                />
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Submit Bar */}
+        {/* Error Notice */}
+        {error && (
+          <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
+            <AlertCircle className="h-4 w-4 flex-shrink-0" />
+            <span>{error}</span>
+          </div>
+        )}
+
+        {/* SUBMIT ACTION BAR */}
         <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-[#24283B]">
           <div className="text-xs text-slate-400 flex items-center gap-2">
             <Info className="h-4 w-4 text-indigo-400 flex-shrink-0" />
@@ -437,17 +828,17 @@ export default function ConfigurePage() {
             type="button"
             onClick={handleGenerateClips}
             disabled={isGenerating}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-xl shadow-indigo-600/30 active:scale-95 transition-all"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-bold text-sm shadow-xl shadow-indigo-600/30 active:scale-95 transition-all"
           >
             {isGenerating ? (
               <>
                 <Wand2 className="h-4 w-4 animate-spin" />
-                <span>Launching Media Engine...</span>
+                <span>{generatingStatus}</span>
               </>
             ) : (
               <>
                 <Sparkles className="h-4 w-4" />
-                <span>Generate Clips Now</span>
+                <span>Get Clips</span>
                 <ArrowRight className="h-4 w-4" />
               </>
             )}
@@ -455,5 +846,19 @@ export default function ConfigurePage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function ConfigurePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#090A0F] text-[#F8FAFC] flex items-center justify-center">
+          <Wand2 className="h-6 w-6 text-indigo-400 animate-spin" />
+        </div>
+      }
+    >
+      <ConfigureForm />
+    </Suspense>
   );
 }

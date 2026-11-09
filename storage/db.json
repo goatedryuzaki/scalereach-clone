@@ -41,6 +41,57 @@
       "expiresAt": null,
       "createdAt": "2026-11-03T11:49:44.829Z",
       "updatedAt": "2026-11-03T12:49:44.829Z"
+    },
+    "lirl3b5hSPN5OINTZJTGd": {
+      "id": "lirl3b5hSPN5OINTZJTGd",
+      "workspaceId": "0tw4uwrqqbgmw0kuqm9",
+      "title": "Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster)",
+      "description": "The official 4K Remastered music video for Never Gonna Give You Up by Rick Astley.",
+      "duration": 214,
+      "status": "completed",
+      "sourceType": "url",
+      "sourceUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&auto=format&fit=crop&q=60",
+      "progress": 100,
+      "clipConfig": {
+        "clipModel": "ClipPro",
+        "duration": "0-30s",
+        "clipTypes": [
+          "viral-clips"
+        ],
+        "captionTemplateId": "classic",
+        "aspectRatio": "9:16"
+      },
+      "expiresAt": null,
+      "createdAt": "2026-11-06T10:00:00.000Z",
+      "updatedAt": "2026-11-09T07:29:37.446Z"
+    },
+    "vid_1794209944813_54ula": {
+      "id": "vid_1794209944813_54ula",
+      "workspaceId": "0tw4uwrqqbgmw0kuqm9",
+      "title": "Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster)",
+      "description": "",
+      "duration": 214,
+      "status": "completed",
+      "sourceType": "url",
+      "sourceUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "filePath": "",
+      "thumbnailUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg",
+      "progress": 100,
+      "clipConfig": {
+        "clipTypes": [
+          "viral-clips"
+        ],
+        "duration": 214,
+        "customPrompt": "",
+        "captionTemplateId": "classic",
+        "aspectRatio": "9:16",
+        "backgroundAssetId": null
+      },
+      "notes": "",
+      "expiresAt": null,
+      "createdAt": "2026-11-09T07:39:04.813Z",
+      "updatedAt": "2026-11-09T07:39:04.813Z"
     }
   },
   "clips": {
@@ -141,6 +192,204 @@
       "favorited": false,
       "createdAt": "2026-11-03T13:50:49.347Z",
       "updatedAt": "2026-11-03T13:50:49.347Z"
+    },
+    "mR_JOA9k7Epv1rqUi_U92": {
+      "id": "mR_JOA9k7Epv1rqUi_U92",
+      "videoId": "lirl3b5hSPN5OINTZJTGd",
+      "title": "#1 The Ultimate Rickroll",
+      "introTitle": "We're no strangers to love",
+      "startTime": 12,
+      "endTime": 30.5,
+      "duration": 18.5,
+      "transcript": "We're no strangers to love. You know the rules and so do I. A full commitment's what I'm thinking of. You wouldn't get this from any other guy!",
+      "viralityScore": 88,
+      "viralityReason": "Legendary pop intro with unmatched instant recognition across global audiences.",
+      "improvementSuggestion": "Already viral perfection. Direct export recommended.",
+      "hooks": [
+        "Iconic Opening Beat",
+        "High Energy Dance Hook",
+        "Nostalgia Factor"
+      ],
+      "emotions": [
+        "Joyful",
+        "Nostalgic",
+        "Energetic"
+      ],
+      "recommendedPlatforms": [
+        "TikTok",
+        "YouTube Shorts",
+        "Instagram Reels"
+      ],
+      "aspectRatio": "9:16",
+      "templateId": "classic",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&auto=format&fit=crop&q=60",
+      "favorited": true,
+      "createdAt": "2026-11-06T10:01:00.000Z",
+      "updatedAt": "2026-11-09T07:29:37.448Z"
+    },
+    "clip_rick_never_give_up": {
+      "id": "clip_rick_never_give_up",
+      "videoId": "lirl3b5hSPN5OINTZJTGd",
+      "title": "#2 Never Gonna Let You Down",
+      "introTitle": "Never gonna give you up!",
+      "startTime": 43,
+      "endTime": 67.2,
+      "duration": 24.2,
+      "transcript": "Never gonna give you up! Never gonna let you down! Never gonna run around and desert you! Never gonna make you cry! Never gonna say goodbye!",
+      "viralityScore": 92,
+      "viralityReason": "World-famous chorus hook with explosive audience participation and karaoke retention.",
+      "improvementSuggestion": "Add dynamic zoom on the chorus drop for extra punch.",
+      "hooks": [
+        "Explosive Chorus Hook",
+        "Universal Commitment Theme"
+      ],
+      "emotions": [
+        "Euphoric",
+        "Inspired",
+        "Happy"
+      ],
+      "recommendedPlatforms": [
+        "TikTok",
+        "YouTube Shorts",
+        "Instagram Reels"
+      ],
+      "aspectRatio": "9:16",
+      "templateId": "cyan-slide",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&auto=format&fit=crop&q=60",
+      "favorited": false,
+      "createdAt": "2026-11-06T10:02:00.000Z",
+      "updatedAt": "2026-11-09T07:29:37.448Z"
+    },
+    "clip_rick_together_forever": {
+      "id": "clip_rick_together_forever",
+      "videoId": "lirl3b5hSPN5OINTZJTGd",
+      "title": "#3 We Know the Game",
+      "introTitle": "We're gonna play it",
+      "startTime": 80,
+      "endTime": 100.5,
+      "duration": 20.5,
+      "transcript": "We've known each other for so long. Your heart's been aching but you're too shy to say it. Inside we both know what's been going on.",
+      "viralityScore": 85,
+      "viralityReason": "High emotional relatability with deep curiosity gap pacing.",
+      "improvementSuggestion": "Cut dead air before the rhythm section comes back in.",
+      "hooks": [
+        "Direct Eye Contact",
+        "Relatable Relationship Hook"
+      ],
+      "emotions": [
+        "Curious",
+        "Empathetic"
+      ],
+      "recommendedPlatforms": [
+        "TikTok",
+        "YouTube Shorts"
+      ],
+      "aspectRatio": "9:16",
+      "templateId": "italic-red",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&auto=format&fit=crop&q=60",
+      "favorited": false,
+      "createdAt": "2026-11-06T10:03:00.000Z",
+      "updatedAt": "2026-11-09T07:29:37.448Z"
+    },
+    "clip_1794209944817_nfxww": {
+      "id": "clip_1794209944817_nfxww",
+      "videoId": "vid_1794209944813_54ula",
+      "title": "#1 The Golden Hook: Rick Astley - Never Gonna Give You Up",
+      "introTitle": "Stop scrolling and watch this!",
+      "startTime": 0,
+      "endTime": 28.5,
+      "duration": 28.5,
+      "transcript": "Here is the one thing most people never realize about Rick Astley - Never. When you understand this fundamental principle, everything shifts immediately. Stop overcomplicating the process and focus on what actually drives results!",
+      "viralityScore": 94,
+      "viralityReason": "High retention curiosity gap opening followed by rapid punchy delivery and a clear contrarian insight.",
+      "improvementSuggestion": "Pacing is crisp and engaging. Perfect for TikTok and YouTube Shorts algorithms.",
+      "hooks": [
+        "Curiosity Gap",
+        "Pattern Interrupt",
+        "Direct Value Statement"
+      ],
+      "emotions": [
+        "Curious",
+        "Inspired",
+        "Surprised"
+      ],
+      "recommendedPlatforms": [
+        "TikTok",
+        "YouTube Shorts",
+        "Instagram Reels"
+      ],
+      "aspectRatio": "9:16",
+      "templateId": "classic",
+      "thumbnailUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg",
+      "favorited": false,
+      "createdAt": "2026-11-09T07:39:04.817Z",
+      "updatedAt": "2026-11-09T07:39:04.817Z"
+    },
+    "clip_1794209944823_kcg21": {
+      "id": "clip_1794209944823_kcg21",
+      "videoId": "vid_1794209944813_54ula",
+      "title": "#2 The Critical Mistake in Rick Astley - Never",
+      "introTitle": "Avoid this costly trap!",
+      "startTime": 32,
+      "endTime": 64.5,
+      "duration": 32.5,
+      "transcript": "This is by far the biggest trap people fall into. Most creators spend months doing the wrong thing, but if you flip your strategy today, your engagement will literally explode!",
+      "viralityScore": 91,
+      "viralityReason": "Strong negative bias hook creates urgency and FOMO, driving high completion rates.",
+      "improvementSuggestion": "Add zoom-in emphasis on the key phrase for extra impact.",
+      "hooks": [
+        "Negative Bias",
+        "Urgency",
+        "Actionable Fix"
+      ],
+      "emotions": [
+        "Cautionary",
+        "Motivated",
+        "Focused"
+      ],
+      "recommendedPlatforms": [
+        "TikTok",
+        "Instagram Reels"
+      ],
+      "aspectRatio": "9:16",
+      "templateId": "classic",
+      "thumbnailUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg",
+      "favorited": false,
+      "createdAt": "2026-11-09T07:39:04.823Z",
+      "updatedAt": "2026-11-09T07:39:04.823Z"
+    },
+    "clip_1794209944830_trurj": {
+      "id": "clip_1794209944830_trurj",
+      "videoId": "vid_1794209944813_54ula",
+      "title": "#3 The Secret Formula for Fast Growth",
+      "introTitle": "How to scale faster than everyone else",
+      "startTime": 70,
+      "endTime": 102,
+      "duration": 32,
+      "transcript": "If you want to master Rick Astley - Never, remember these three rules. First, prioritize clarity over complexity. Second, test relentlessly. And third, double down on what works!",
+      "viralityScore": 89,
+      "viralityReason": "Listicle format structure triggers save and share actions from high-intent viewers.",
+      "improvementSuggestion": "Display numbered animated counters for each of the three rules.",
+      "hooks": [
+        "Listicle Framework",
+        "Actionable Blueprint",
+        "Share Trigger"
+      ],
+      "emotions": [
+        "Empowered",
+        "Educated"
+      ],
+      "recommendedPlatforms": [
+        "YouTube Shorts",
+        "LinkedIn Video",
+        "Instagram Reels"
+      ],
+      "aspectRatio": "9:16",
+      "templateId": "classic",
+      "thumbnailUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg",
+      "favorited": false,
+      "createdAt": "2026-11-09T07:39:04.830Z",
+      "updatedAt": "2026-11-09T07:39:04.830Z"
     }
   },
   "captions": {
@@ -347,6 +596,893 @@
         "strokeWidth": 5,
         "animation": "fade-up"
       }
+    },
+    "mR_JOA9k7Epv1rqUi_U92": {
+      "clipId": "mR_JOA9k7Epv1rqUi_U92",
+      "presetId": "classic",
+      "words": [
+        {
+          "id": "rw-1",
+          "word": "We're",
+          "start": 0.1,
+          "end": 0.4,
+          "isHighlighted": false
+        },
+        {
+          "id": "rw-2",
+          "word": "no",
+          "start": 0.45,
+          "end": 0.7,
+          "isHighlighted": false
+        },
+        {
+          "id": "rw-3",
+          "word": "strangers",
+          "start": 0.75,
+          "end": 1.3,
+          "isHighlighted": true,
+          "color": "#38BDF8"
+        },
+        {
+          "id": "rw-4",
+          "word": "to",
+          "start": 1.35,
+          "end": 1.5,
+          "isHighlighted": false
+        },
+        {
+          "id": "rw-5",
+          "word": "love",
+          "start": 1.55,
+          "end": 2.1,
+          "isHighlighted": true,
+          "color": "#F43F5E",
+          "emoji": "❤️"
+        },
+        {
+          "id": "rw-6",
+          "word": "You",
+          "start": 2.3,
+          "end": 2.5,
+          "isHighlighted": false
+        },
+        {
+          "id": "rw-7",
+          "word": "know",
+          "start": 2.55,
+          "end": 2.8,
+          "isHighlighted": false
+        },
+        {
+          "id": "rw-8",
+          "word": "the",
+          "start": 2.85,
+          "end": 3,
+          "isHighlighted": false
+        },
+        {
+          "id": "rw-9",
+          "word": "rules",
+          "start": 3.05,
+          "end": 3.5,
+          "isHighlighted": true,
+          "color": "#FACC15",
+          "emoji": "📜"
+        },
+        {
+          "id": "rw-10",
+          "word": "and",
+          "start": 3.55,
+          "end": 3.7,
+          "isHighlighted": false
+        },
+        {
+          "id": "rw-11",
+          "word": "so",
+          "start": 3.75,
+          "end": 3.9,
+          "isHighlighted": false
+        },
+        {
+          "id": "rw-12",
+          "word": "do",
+          "start": 3.95,
+          "end": 4.1,
+          "isHighlighted": false
+        },
+        {
+          "id": "rw-13",
+          "word": "I!",
+          "start": 4.15,
+          "end": 4.7,
+          "isHighlighted": true,
+          "color": "#4ADE80",
+          "emoji": "🔥"
+        }
+      ],
+      "style": {
+        "fontFamily": "Montserrat",
+        "fontSize": 44,
+        "textColor": "#FFFFFF",
+        "highlightColor": "#38BDF8",
+        "strokeColor": "#000000",
+        "strokeWidth": 4,
+        "animation": "fade"
+      }
+    },
+    "clip_1794209944817_nfxww": {
+      "clipId": "clip_1794209944817_nfxww",
+      "presetId": "classic",
+      "words": [
+        {
+          "id": "w-0-0",
+          "word": "Here",
+          "start": 0,
+          "end": 0.35,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-0-1",
+          "word": "is",
+          "start": 0.84,
+          "end": 1.19,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "⚡"
+        },
+        {
+          "id": "w-0-2",
+          "word": "the",
+          "start": 1.68,
+          "end": 2.03,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-0-3",
+          "word": "one",
+          "start": 2.51,
+          "end": 2.86,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-0-4",
+          "word": "thing",
+          "start": 3.35,
+          "end": 3.7,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-0-5",
+          "word": "most",
+          "start": 4.19,
+          "end": 4.54,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "🔥"
+        },
+        {
+          "id": "w-0-6",
+          "word": "people",
+          "start": 5.03,
+          "end": 5.38,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-0-7",
+          "word": "never",
+          "start": 5.87,
+          "end": 6.22,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-0-8",
+          "word": "realize",
+          "start": 6.71,
+          "end": 7.06,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "💡"
+        },
+        {
+          "id": "w-0-9",
+          "word": "about",
+          "start": 7.54,
+          "end": 7.89,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "🤯"
+        },
+        {
+          "id": "w-0-10",
+          "word": "Rick",
+          "start": 8.38,
+          "end": 8.73,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-0-11",
+          "word": "Astley",
+          "start": 9.22,
+          "end": 9.57,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-0-12",
+          "word": "-",
+          "start": 10.06,
+          "end": 10.41,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-0-13",
+          "word": "Never.",
+          "start": 10.9,
+          "end": 11.25,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "💡"
+        },
+        {
+          "id": "w-0-14",
+          "word": "When",
+          "start": 11.74,
+          "end": 12.09,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-0-15",
+          "word": "you",
+          "start": 12.57,
+          "end": 12.92,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-0-16",
+          "word": "understand",
+          "start": 13.41,
+          "end": 13.76,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "⚡"
+        },
+        {
+          "id": "w-0-17",
+          "word": "this",
+          "start": 14.25,
+          "end": 14.6,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "🚀"
+        },
+        {
+          "id": "w-0-18",
+          "word": "fundamental",
+          "start": 15.09,
+          "end": 15.44,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "💡"
+        },
+        {
+          "id": "w-0-19",
+          "word": "principle,",
+          "start": 15.93,
+          "end": 16.28,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "🤯"
+        },
+        {
+          "id": "w-0-20",
+          "word": "everything",
+          "start": 16.76,
+          "end": 17.11,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "🔥"
+        },
+        {
+          "id": "w-0-21",
+          "word": "shifts",
+          "start": 17.6,
+          "end": 17.95,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "⚡"
+        },
+        {
+          "id": "w-0-22",
+          "word": "immediately.",
+          "start": 18.44,
+          "end": 18.79,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "🚀"
+        },
+        {
+          "id": "w-0-23",
+          "word": "Stop",
+          "start": 19.28,
+          "end": 19.63,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-0-24",
+          "word": "overcomplicating",
+          "start": 20.12,
+          "end": 20.47,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "🤯"
+        },
+        {
+          "id": "w-0-25",
+          "word": "the",
+          "start": 20.96,
+          "end": 21.31,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "🔥"
+        },
+        {
+          "id": "w-0-26",
+          "word": "process",
+          "start": 21.79,
+          "end": 22.14,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "⚡"
+        },
+        {
+          "id": "w-0-27",
+          "word": "and",
+          "start": 22.63,
+          "end": 22.98,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-0-28",
+          "word": "focus",
+          "start": 23.47,
+          "end": 23.82,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-0-29",
+          "word": "on",
+          "start": 24.31,
+          "end": 24.66,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "🤯"
+        },
+        {
+          "id": "w-0-30",
+          "word": "what",
+          "start": 25.15,
+          "end": 25.5,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-0-31",
+          "word": "actually",
+          "start": 25.99,
+          "end": 26.34,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "⚡"
+        },
+        {
+          "id": "w-0-32",
+          "word": "drives",
+          "start": 26.82,
+          "end": 27.17,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-0-33",
+          "word": "results!",
+          "start": 27.66,
+          "end": 28.01,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "💡"
+        }
+      ],
+      "style": {
+        "fontFamily": "Poppins",
+        "fontSize": 48,
+        "textColor": "#FFFFFF",
+        "highlightColor": "#FFFF00",
+        "strokeColor": "#000000",
+        "strokeWidth": 5,
+        "animation": "fade-up",
+        "wordsPerLine": 3
+      }
+    },
+    "clip_1794209944823_kcg21": {
+      "clipId": "clip_1794209944823_kcg21",
+      "presetId": "classic",
+      "words": [
+        {
+          "id": "w-1-0",
+          "word": "This",
+          "start": 32,
+          "end": 32.35,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-1-1",
+          "word": "is",
+          "start": 33.08,
+          "end": 33.43,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "⚡"
+        },
+        {
+          "id": "w-1-2",
+          "word": "by",
+          "start": 34.17,
+          "end": 34.52,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-1-3",
+          "word": "far",
+          "start": 35.25,
+          "end": 35.6,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-1-4",
+          "word": "the",
+          "start": 36.33,
+          "end": 36.68,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-1-5",
+          "word": "biggest",
+          "start": 37.42,
+          "end": 37.77,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "🔥"
+        },
+        {
+          "id": "w-1-6",
+          "word": "trap",
+          "start": 38.5,
+          "end": 38.85,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-1-7",
+          "word": "people",
+          "start": 39.58,
+          "end": 39.93,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-1-8",
+          "word": "fall",
+          "start": 40.67,
+          "end": 41.02,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-1-9",
+          "word": "into.",
+          "start": 41.75,
+          "end": 42.1,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "🤯"
+        },
+        {
+          "id": "w-1-10",
+          "word": "Most",
+          "start": 42.83,
+          "end": 43.18,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-1-11",
+          "word": "creators",
+          "start": 43.92,
+          "end": 44.27,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "⚡"
+        },
+        {
+          "id": "w-1-12",
+          "word": "spend",
+          "start": 45,
+          "end": 45.35,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-1-13",
+          "word": "months",
+          "start": 46.08,
+          "end": 46.43,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "💡"
+        },
+        {
+          "id": "w-1-14",
+          "word": "doing",
+          "start": 47.17,
+          "end": 47.52,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-1-15",
+          "word": "the",
+          "start": 48.25,
+          "end": 48.6,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-1-16",
+          "word": "wrong",
+          "start": 49.33,
+          "end": 49.68,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-1-17",
+          "word": "thing,",
+          "start": 50.42,
+          "end": 50.77,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "🚀"
+        },
+        {
+          "id": "w-1-18",
+          "word": "but",
+          "start": 51.5,
+          "end": 51.85,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-1-19",
+          "word": "if",
+          "start": 52.58,
+          "end": 52.93,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-1-20",
+          "word": "you",
+          "start": 53.67,
+          "end": 54.02,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-1-21",
+          "word": "flip",
+          "start": 54.75,
+          "end": 55.1,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "⚡"
+        },
+        {
+          "id": "w-1-22",
+          "word": "your",
+          "start": 55.83,
+          "end": 56.18,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-1-23",
+          "word": "strategy",
+          "start": 56.92,
+          "end": 57.27,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "💡"
+        },
+        {
+          "id": "w-1-24",
+          "word": "today,",
+          "start": 58,
+          "end": 58.35,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-1-25",
+          "word": "your",
+          "start": 59.08,
+          "end": 59.43,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "🔥"
+        },
+        {
+          "id": "w-1-26",
+          "word": "engagement",
+          "start": 60.17,
+          "end": 60.52,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "⚡"
+        },
+        {
+          "id": "w-1-27",
+          "word": "will",
+          "start": 61.25,
+          "end": 61.6,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-1-28",
+          "word": "literally",
+          "start": 62.33,
+          "end": 62.68,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "💡"
+        },
+        {
+          "id": "w-1-29",
+          "word": "explode!",
+          "start": 63.42,
+          "end": 63.77,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "🤯"
+        }
+      ],
+      "style": {
+        "fontFamily": "Poppins",
+        "fontSize": 48,
+        "textColor": "#FFFFFF",
+        "highlightColor": "#FFFF00",
+        "strokeColor": "#000000",
+        "strokeWidth": 5,
+        "animation": "fade-up",
+        "wordsPerLine": 3
+      }
+    },
+    "clip_1794209944830_trurj": {
+      "clipId": "clip_1794209944830_trurj",
+      "presetId": "classic",
+      "words": [
+        {
+          "id": "w-2-0",
+          "word": "If",
+          "start": 70,
+          "end": 70.35,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-2-1",
+          "word": "you",
+          "start": 71.14,
+          "end": 71.49,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "⚡"
+        },
+        {
+          "id": "w-2-2",
+          "word": "want",
+          "start": 72.29,
+          "end": 72.64,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-2-3",
+          "word": "to",
+          "start": 73.43,
+          "end": 73.78,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-2-4",
+          "word": "master",
+          "start": 74.57,
+          "end": 74.92,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-2-5",
+          "word": "Rick",
+          "start": 75.71,
+          "end": 76.06,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "🔥"
+        },
+        {
+          "id": "w-2-6",
+          "word": "Astley",
+          "start": 76.86,
+          "end": 77.21,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-2-7",
+          "word": "-",
+          "start": 78,
+          "end": 78.35,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-2-8",
+          "word": "Never,",
+          "start": 79.14,
+          "end": 79.49,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-2-9",
+          "word": "remember",
+          "start": 80.29,
+          "end": 80.64,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "🤯"
+        },
+        {
+          "id": "w-2-10",
+          "word": "these",
+          "start": 81.43,
+          "end": 81.78,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-2-11",
+          "word": "three",
+          "start": 82.57,
+          "end": 82.92,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-2-12",
+          "word": "rules.",
+          "start": 83.71,
+          "end": 84.06,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-2-13",
+          "word": "First,",
+          "start": 84.86,
+          "end": 85.21,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "💡"
+        },
+        {
+          "id": "w-2-14",
+          "word": "prioritize",
+          "start": 86,
+          "end": 86.35,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "🤯"
+        },
+        {
+          "id": "w-2-15",
+          "word": "clarity",
+          "start": 87.14,
+          "end": 87.49,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "🔥"
+        },
+        {
+          "id": "w-2-16",
+          "word": "over",
+          "start": 88.29,
+          "end": 88.64,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-2-17",
+          "word": "complexity.",
+          "start": 89.43,
+          "end": 89.78,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "🚀"
+        },
+        {
+          "id": "w-2-18",
+          "word": "Second,",
+          "start": 90.57,
+          "end": 90.92,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "💡"
+        },
+        {
+          "id": "w-2-19",
+          "word": "test",
+          "start": 91.71,
+          "end": 92.06,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-2-20",
+          "word": "relentlessly.",
+          "start": 92.86,
+          "end": 93.21,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "🔥"
+        },
+        {
+          "id": "w-2-21",
+          "word": "And",
+          "start": 94,
+          "end": 94.35,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "⚡"
+        },
+        {
+          "id": "w-2-22",
+          "word": "third,",
+          "start": 95.14,
+          "end": 95.49,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-2-23",
+          "word": "double",
+          "start": 96.29,
+          "end": 96.64,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-2-24",
+          "word": "down",
+          "start": 97.43,
+          "end": 97.78,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-2-25",
+          "word": "on",
+          "start": 98.57,
+          "end": 98.92,
+          "isHighlighted": true,
+          "color": "#FFFF00",
+          "emoji": "🔥"
+        },
+        {
+          "id": "w-2-26",
+          "word": "what",
+          "start": 99.71,
+          "end": 100.06,
+          "isHighlighted": false
+        },
+        {
+          "id": "w-2-27",
+          "word": "works!",
+          "start": 100.86,
+          "end": 101.21,
+          "isHighlighted": false
+        }
+      ],
+      "style": {
+        "fontFamily": "Poppins",
+        "fontSize": 48,
+        "textColor": "#FFFFFF",
+        "highlightColor": "#FFFF00",
+        "strokeColor": "#000000",
+        "strokeWidth": 5,
+        "animation": "fade-up",
+        "wordsPerLine": 3
+      }
     }
   },
   "exportJobs": {
@@ -400,6 +1536,23 @@
       "error": null,
       "createdAt": "2026-11-03T13:50:49.352Z",
       "updatedAt": "2026-11-03T13:51:11.594Z"
+    },
+    "job_1794209789304_wmrtp": {
+      "jobId": "job_1794209789304_wmrtp",
+      "clipId": "mR_JOA9k7Epv1rqUi_U92",
+      "resolution": "1080p",
+      "fps": 60,
+      "includeWatermark": false,
+      "aspectRatio": "9:16",
+      "presetId": "classic",
+      "layoutType": "single",
+      "status": "completed",
+      "progress": 100,
+      "downloadUrl": "/api/clips/mR_JOA9k7Epv1rqUi_U92/export?jobId=job_1794209789304_wmrtp&download=true",
+      "outputPath": "C:\\Users\\aatif\\OneDrive\\Documents\\ScaleReach\\storage\\exports\\job_1794209789304_wmrtp.mp4",
+      "error": null,
+      "createdAt": "2026-11-09T07:36:29.304Z",
+      "updatedAt": "2026-11-09T07:36:38.627Z"
     }
   },
   "brandTemplates": {

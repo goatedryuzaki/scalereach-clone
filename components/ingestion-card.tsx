@@ -65,26 +65,7 @@ export function IngestionCard() {
     }
 
     setIsSubmitting(true);
-
-    const videoId = `video-${Date.now()}`;
-    const newVideo = {
-      id: videoId,
-      title: `${match.name} Video — ${url.slice(0, 40)}...`,
-      duration: 360,
-      sourceUrl: url.trim(),
-      sourceType: 'url' as const,
-      thumbnailUrl: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800&auto=format&fit=crop&q=60',
-      status: 'completed' as const,
-      progress: 100,
-    };
-
-    setActiveVideo(newVideo);
-    addRecentVideo(newVideo);
-
-    setTimeout(() => {
-      setIsSubmitting(false);
-      router.push('/configure');
-    }, 600);
+    router.push(`/configure?url=${encodeURIComponent(url.trim())}`);
   };
 
   const handleFileDrop = (e: React.DragEvent) => {

@@ -441,13 +441,13 @@ export default function BrandTemplatePage() {
           </div>
         </div>
 
-        {/* Complete 24 Caption Presets Grid */}
+        {/* Complete 29 Caption Presets Grid */}
         <div className="space-y-6 pt-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h2 className="text-lg font-bold text-white flex items-center gap-2">
                 <Layers className="h-5 w-5 text-indigo-400" />
-                <span>All 24 Caption Animation Presets</span>
+                <span>All 29 Caption Animation Presets</span>
               </h2>
               <p className="text-xs text-slate-400">
                 Verbatim extracted CSS styles from Alex Hormozi, MrBeast, GaryVee, TikTok, and modern cinema

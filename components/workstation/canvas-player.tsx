@@ -105,6 +105,14 @@ export function CanvasPlayer({
   const videoSrc = video?.filePath || video?.sourceUrl || '/sample-video.mp4';
   const posterSrc = clip?.thumbnailUrl || video?.thumbnailUrl || 'https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=800&auto=format&fit=crop&q=60';
 
+  // Helper to extract YouTube video ID if URL is provided
+  const extractYouTubeId = (url: string | undefined): string | null => {
+    if (!url) return null;
+    const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/);
+    return match ? match[1] : null;
+  };
+  const ytId = extractYouTubeId(video?.sourceUrl || videoSrc);
+
   // Find active B-roll asset
   let activeBroll: BRollItem | undefined;
   if (brollAssetId) {
@@ -398,18 +406,27 @@ export function CanvasPlayer({
         {/* LAYOUT 1: SINGLE SPEAKER */}
         {layoutMode === 'single' && (
           <div className="relative w-full h-full overflow-hidden flex items-center justify-center">
-            {/* Native Video Element */}
-            <video
-              ref={videoRef}
-              src={videoSrc}
-              poster={posterSrc}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-75"
-              style={{
-                transform: `scale(${speakerCrop.zoom}) translate(${50 - speakerCrop.x}%, ${50 - speakerCrop.y}%)`,
-              }}
-              playsInline
-              loop
-            />
+            {/* Native Video or YouTube Embed */}
+            {ytId ? (
+              <iframe
+                src={`https://www.youtube-nocookie.com/embed/${ytId}?autoplay=${isPlaying ? 1 : 0}&start=${Math.floor(currentTime)}&controls=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&enablejsapi=1`}
+                className="absolute inset-0 w-full h-full object-cover pointer-events-none scale-125"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                title="ScaleReach Canvas Video"
+              />
+            ) : (
+              <video
+                ref={videoRef}
+                src={videoSrc}
+                poster={posterSrc}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-75"
+                style={{
+                  transform: `scale(${speakerCrop.zoom}) translate(${50 - speakerCrop.x}%, ${50 - speakerCrop.y}%)`,
+                }}
+                playsInline
+                loop
+              />
+            )}
 
             {/* Interactive Facecam Bounding Box Overlay */}
             {showFacecamGuide && (
@@ -436,17 +453,26 @@ export function CanvasPlayer({
               className="relative w-full overflow-hidden bg-black flex items-center justify-center"
               style={{ height: `${splitRatio}%` }}
             >
-              <video
-                ref={videoRef}
-                src={videoSrc}
-                poster={posterSrc}
-                className="w-full h-full object-cover"
-                style={{
-                  transform: `scale(${speakerCrop.zoom}) translate(${50 - speakerCrop.x}%, ${50 - speakerCrop.y}%)`,
-                }}
-                playsInline
-                loop
-              />
+              {ytId ? (
+                <iframe
+                  src={`https://www.youtube-nocookie.com/embed/${ytId}?autoplay=${isPlaying ? 1 : 0}&start=${Math.floor(currentTime)}&controls=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&enablejsapi=1`}
+                  className="w-full h-full object-cover pointer-events-none scale-125"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  title="ScaleReach Canvas Video"
+                />
+              ) : (
+                <video
+                  ref={videoRef}
+                  src={videoSrc}
+                  poster={posterSrc}
+                  className="w-full h-full object-cover"
+                  style={{
+                    transform: `scale(${speakerCrop.zoom}) translate(${50 - speakerCrop.x}%, ${50 - speakerCrop.y}%)`,
+                  }}
+                  playsInline
+                  loop
+                />
+              )}
               <div className="absolute top-2 left-2 bg-black/70 backdrop-blur-md px-2 py-0.5 rounded text-[10px] font-bold text-slate-300 border border-white/10 uppercase tracking-wider">
                 Speaker Facecam
               </div>
@@ -510,14 +536,23 @@ export function CanvasPlayer({
             />
             {/* Foreground Letterboxed Video */}
             <div className="relative z-10 w-full aspect-video shadow-2xl border-y border-white/10 overflow-hidden">
-              <video
-                ref={videoRef}
-                src={videoSrc}
-                poster={posterSrc}
-                className="w-full h-full object-contain"
-                playsInline
-                loop
-              />
+              {ytId ? (
+                <iframe
+                  src={`https://www.youtube-nocookie.com/embed/${ytId}?autoplay=${isPlaying ? 1 : 0}&start=${Math.floor(currentTime)}&controls=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&enablejsapi=1`}
+                  className="w-full h-full object-contain pointer-events-none"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  title="ScaleReach Canvas Video"
+                />
+              ) : (
+                <video
+                  ref={videoRef}
+                  src={videoSrc}
+                  poster={posterSrc}
+                  className="w-full h-full object-contain"
+                  playsInline
+                  loop
+                />
+              )}
             </div>
             <div className="absolute top-3 left-3 z-20 bg-black/70 backdrop-blur-md px-2 py-0.5 rounded text-[10px] font-semibold text-slate-300 border border-white/10 uppercase tracking-wider">
               25px Gaussian Blur Fill
